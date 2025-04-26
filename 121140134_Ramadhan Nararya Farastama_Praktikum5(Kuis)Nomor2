@@ -1,0 +1,97 @@
+import random
+
+# Daftar kata yang bisa ditebak
+word_list = ['python', 'hangman', 'program', 'computer', 'algorithm', 'function']
+
+# Gambar hangman per level kesalahan
+hangman_pics = [
+    '''
+      +---+
+          |
+          |
+          |
+         ===''', 
+    '''
+      +---+
+      O   |
+          |
+          |
+         ===''', 
+    '''
+      +---+
+      O   |
+      |   |
+          |
+         ===''', 
+    '''
+      +---+
+      O   |
+     /|   |
+          |
+         ===''', 
+    '''
+      +---+
+      O   |
+     /|\\  |
+          |
+         ===''', 
+    '''
+      +---+
+      O   |
+     /|\\  |
+     /    |
+         ===''', 
+    '''
+      +---+
+      O   |
+     /|\\  |
+     / \\  |
+         ==='''
+]
+
+# Fungsi untuk memilih kata acak
+def get_random_word(word_list):
+    return random.choice(word_list)
+
+# Fungsi utama permainan
+def play_hangman():
+    word = get_random_word(word_list)
+    word_letters = set(word)
+    guessed_letters = set()
+    tries = 0
+    max_tries = len(hangman_pics) - 1
+
+    print("Selamat datang di Hangman!")
+    print("Tebak huruf satu per satu.")
+    
+    while tries < max_tries and word_letters:
+        print(hangman_pics[tries])
+        print("Kata: ", ' '.join([letter if letter in guessed_letters else '_' for letter in word]))
+        guess = input("Tebak satu huruf: ").lower()
+
+        if not guess.isalpha() or len(guess) != 1:
+            print("Masukkan hanya satu huruf!")
+            continue
+
+        if guess in guessed_letters:
+            print("Kamu sudah menebak huruf ini. Coba huruf lain!")
+            continue
+
+        guessed_letters.add(guess)
+
+        if guess in word_letters:
+            print(f"Bagus! Huruf '{guess}' ada di kata.")
+            word_letters.remove(guess)
+        else:
+            print(f"Salah! Huruf '{guess}' tidak ada di kata.")
+            tries += 1
+
+    # Kondisi menang atau kalah
+    if not word_letters:
+        print("Selamat! Kamu berhasil menebak kata:", word)
+    else:
+        print(hangman_pics[tries])
+        print("Kamu gagal! Kata yang benar adalah:", word)
+
+# Jalankan permainan
+play_hangman()
